@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Softklin.MasterMind
+namespace Softklin.Mastermind
 {
     /// <summary>
-    /// Represents a MasterMind game 
+    /// Represents a Mastermind game 
     /// </summary>
     class MastermindGame
     {
@@ -25,7 +25,7 @@ namespace Softklin.MasterMind
 
 
         /// <summary>
-        /// Creates a new MasterMind game
+        /// Creates a new Mastermind game
         /// </summary>
         /// <param name="players">The players</param>
         internal MastermindGame (Player[] players)
@@ -72,8 +72,6 @@ namespace Softklin.MasterMind
         {
             if (!this.Players[0].Equals(player) && !this.Players[1].Equals(player))
                 throw new MastermindGameException("The player doesn't exists in this game");
-
-
         }
     }
 
@@ -95,6 +93,9 @@ namespace Softklin.MasterMind
     }
 
 
+    /// <summary>
+    /// Exceptions related with the MastermindGame Class
+    /// </summary>
     [Serializable]
     public class MastermindGameException : Exception
     {

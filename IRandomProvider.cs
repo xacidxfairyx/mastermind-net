@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Softklin.MasterMind
+namespace Softklin.Mastermind
 {
     /// <summary>
     /// Defines rules to create a Random Provider
