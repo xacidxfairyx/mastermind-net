@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Softklin.MasterMind
+namespace Softklin.Mastermind
 {
     /// <summary>
     /// Represents a player in the mastermind game
@@ -33,16 +33,29 @@ namespace Softklin.MasterMind
 
         #region Overrides
 
+        /// <summary>
+        /// Checks if two PLayers are equal (by nicknames)
+        /// </summary>
+        /// <param name="obj">Other object to compare</param>
+        /// <returns>True, if there is the smae player, false otherwise</returns>
         public override bool Equals(object obj)
         {
             return (obj is Player && ((Player)obj).Nickname == this.Nickname);
         }
 
+        /// <summary>
+        /// Generates an unique hash code for each player
+        /// </summary>
+        /// <returns>hash code generated from nickname</returns>
         public override int GetHashCode()
         {
             return this.Nickname.GetHashCode();
         }
 
+        /// <summary>
+        /// Returns the player textual representation
+        /// </summary>
+        /// <returns>player nickname</returns>
         public override string ToString()
         {
             return this.Nickname;
@@ -52,6 +65,9 @@ namespace Softklin.MasterMind
     }
 
 
+    /// <summary>
+    /// Exceptions related with the Player Class
+    /// </summary>
     [Serializable]
     public class MastermindPlayerException : Exception
     {
