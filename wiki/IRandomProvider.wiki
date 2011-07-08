@@ -1,0 +1,20 @@
+#summary Explains what is a RandomProvider and how it works.
+#labels Phase-Implementation
+
+= Introduction =
+
+The first step when the game starts it's to choose the player who will start first. There are 3 methods to choose the player:
+
+  * You call `startGame` in the `MastermindGame` class without any arguments, and a player will be chosen for you using the .Net `Random` class
+  * You call `startGame(Player)`, with the player you want to start the game
+  * You create a RandomProvider which generates a random number for use in the decision
+
+So, a RandomProvider let's you create your own random number generator. It can be useful on some cases.
+
+= Details =
+
+To be done.
+
+= Examples = 
+
+Example of day and night. To be done.
