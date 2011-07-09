@@ -5,7 +5,7 @@ namespace Softklin.Mastermind
     /// <summary>
     /// Mastermind class allows you to create players and games
     /// </summary>
-    /// <remarks>This class is a factory. You should create object instance using this class</remarks>
+    /// <remarks>This class is a factory. You should create objects instances using this class</remarks>
     class Mastermind
     {
         /// <summary>
@@ -23,11 +23,25 @@ namespace Softklin.Mastermind
         /// </summary>
         /// <param name="p1">PLayer 1</param>
         /// <param name="p2">PLayer 2</param>
+        /// <param name="level">The difficulty level of game</param>
         /// <returns>New Mastermind game</returns>
-        /// <remarks>The order of players have no meaning, because the first player will be choosen when the game starts</remarks>
-        public static MastermindGame createGame(Player p1, Player p2)
+        /// <remarks>The difficulty level cannot be "Custom" with this constructor.</remarks>
+        public static MastermindGame createGame(Player p1, Player p2, DifficultyLevel level)
         {
-            return null;
+            return new MastermindGame(new Player[] { p1, p2 }, level);
+        }
+
+        /// <summary>
+        /// Creates a new Mastermind game, with custom configuration
+        /// </summary>
+        /// <param name="p1">Player 1</param>
+        /// <param name="p2">PLayer 2</param>
+        /// <param name="rows">The number of rows in the board</param>
+        /// <param name="pegs">The number of colored pegs per row</param>
+        /// <returns>New Mastermind game, with custom configuration</returns>
+        public static MastermindGame createCustomGame(Player p1, Player p2, int rows, int pegs)
+        {
+            return new MastermindGame(new Player[] { p1, p2 }, rows, pegs);
         }
     }
 }
