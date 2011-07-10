@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Softklin.Mastermind
+﻿namespace Softklin.Mastermind
 {
     /// <summary>
     /// Represents the result of a move

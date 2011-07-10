@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Softklin.Mastermind
+﻿namespace Softklin.Mastermind
 {
     /// <summary>
     /// Represents a board in the Mastermind game
@@ -9,17 +7,34 @@ namespace Softklin.Mastermind
     {
         #region Properties
         /// <summary>
-        /// Get the number of pegs per row
+        /// Gets the number of pegs per row
         /// </summary>
-        public int NumberPegs { get; private set; }
+        internal int NumberPegs { get; private set; }
 
         /// <summary>
-        /// Get the number of rows in the board
+        /// Gets the number of rows in the board
         /// </summary>
-        public int NumberRows { get; private set; }
+        internal int NumberRows { get; private set; }
+
+        /// <summary>
+        /// Gets the current peg row
+        /// </summary>
+        private ColoredPegRow CurrentRow
+        {
+            get { return this.rows[this.curRow]; }
+        }
         #endregion
 
-        // TODO Game representation still needed!
+        private ColoredPegRow combination;
+        private ColoredPegRow[] rows;
+        private int curRow;
+
+
+        private Board()
+        {
+            this.curRow = 0;
+        }
+
 
         /// <summary>
         /// Creates a new board, according to the difficulty level
@@ -27,7 +42,11 @@ namespace Softklin.Mastermind
         /// <param name="level">Difficulty level</param>
         /// <remarks>Don't use this constructor to create a custom game</remarks>
         internal Board(DifficultyLevel level)
-	    {
+            : this()
+        {
+            if (level == DifficultyLevel.Custom)
+                throw new MastermindBoardException("The difficulty level cannot be cutom");
+
             switch (level)
             {
                 case DifficultyLevel.Level1:
@@ -48,7 +67,9 @@ namespace Softklin.Mastermind
                 default:
                     break;
             }
-	    }
+
+            this.rows = new ColoredPegRow[this.NumberRows];
+        }
 
         /// <summary>
         /// Creates a new board using custom settings
@@ -56,21 +77,49 @@ namespace Softklin.Mastermind
         /// <param name="rows">Number of rows of board</param>
         /// <param name="pegs">Number of pegs per row</param>
         internal Board(int rows, int pegs)
+            : this()
         {
             if (rows <= 0 || pegs <= 0)
                 throw new MastermindBoardException("Rows and pegs must be positive non-zero values");
 
             this.NumberPegs = pegs;
             this.NumberRows = rows;
+
+            this.rows = new ColoredPegRow[this.NumberRows];
+        }
+
+        /// <summary>
+        /// Setup the board
+        /// </summary>
+        /// <param name="combination">Secret combination to be guessed by player</param>
+        internal void setup(ColoredPegRow combination)
+        {
+            if (combination == null)
+                throw new MastermindBoardException("The combination cannot be null");
+
+            if (combination.NumberPegs != this.NumberPegs)
+                throw new MastermindBoardException("The combination doesn't match the size of pegs per row");
+
+            this.combination = combination;
+        }
+
+        internal MoveResult doMove(ColoredPegRow row)
+        {
+            if (row.NumberPegs != this.NumberPegs)
+                throw new MastermindBoardException("The row is invalid for this move");
+
+            MoveResult mr = new MoveResult();
+            //TODO logic implementation of doMove
+            return mr;
         }
     }
 
 
     #region Enumerators
     /// <summary>
-    /// Colors avaliable for pegs
+    /// Avaliable colors for pegs
     /// </summary>
-    enum PegColor
+    public enum PegColor
     {
         /// <summary>
         /// Red peg
@@ -103,7 +152,7 @@ namespace Softklin.Mastermind
         Cyan,
 
         /// <summary>
-        /// Light brown peg
+        /// Light brown/gold peg
         /// </summary>
         LightBrown,
 
@@ -113,20 +162,4 @@ namespace Softklin.Mastermind
         Purple
     }
     #endregion
-
-
-    /// <summary>
-    /// Exceptions related with the Board Class
-    /// </summary>
-    [Serializable]
-    public class MastermindBoardException : Exception
-    {
-        public MastermindBoardException() { }
-        public MastermindBoardException(string message) : base(message) { }
-        public MastermindBoardException(string message, Exception inner) : base(message, inner) { }
-        protected MastermindBoardException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context)
-            : base(info, context) { }
-    }
 }

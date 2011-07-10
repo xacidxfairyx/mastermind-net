@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Softklin.Mastermind
+﻿namespace Softklin.Mastermind
 {
     /// <summary>
     /// Represents a Mastermind game 
     /// </summary>
-    class MastermindGame
+    public class MastermindGame
     {
         #region Properties
         /// <summary>
@@ -55,7 +52,7 @@ namespace Softklin.Mastermind
                 throw new MastermindGameException("Players can't be equal");
 
             this.Players = players;
-            this.GameStatus = GameStatus.Ready;
+            this.GameStatus = GameStatus.Setup;
         }
 
         /// <summary>
@@ -86,14 +83,21 @@ namespace Softklin.Mastermind
             this.theBoard = new Board(rows, pegs);
         }
 
-        public void setupGame()
+        /// <summary>
+        /// Creates the combination to be broke by human player
+        /// </summary>
+        /// <param name="combination">An array containing the combination</param>
+        /// <remarks>Once set, the combination cannot be changed</remarks>
+        public void setup(ColoredPegRow combination)
         {
-            // TODO create a game setup class (or possibly using multiple arguments...)
+            if (this.GameStatus != GameStatus.Setup)
+                throw new MastermindGameException("Setup can only be done during setup game status");
+
+            this.theBoard.setup(combination);
+            this.GameStatus = GameStatus.Ready;
         }
 
-        // TODO The start game needs revision because the selection of players doesn't match with the game description
-
-
+        /*
         /// <summary>
         /// Starts the game, using Random class to schoose the first player
         /// </summary>
@@ -132,6 +136,30 @@ namespace Softklin.Mastermind
                 throw new MastermindGameException("The player doesn't exists in this game");
 
             this.CurrentPlayer = player;
+        }*/
+
+        /// <summary>
+        /// Starts the game
+        /// </summary>
+        public void startGame()
+        {
+            if (this.GameStatus != GameStatus.Ready)
+                throw new MastermindGameException("To start the game, setup is needed");
+
+            this.GameStatus = GameStatus.Running;
+        }
+
+        /// <summary>
+        /// Try to guess a row of the board
+        /// </summary>
+        /// <param name="row">Row with pegs to break the combination</param>
+        /// <returns>Result stats of the move</returns>
+        public MoveResult doMove(ColoredPegRow row)
+        {
+            if (this.GameStatus != GameStatus.Running)
+                throw new MastermindGameException("The game is not running");
+
+            return this.theBoard.doMove(row);
         }
     }
 
@@ -140,7 +168,7 @@ namespace Softklin.Mastermind
     /// <summary>
     /// Represents the current game status
     /// </summary>
-    enum GameStatus
+    public enum GameStatus
     {
         /// <summary>
         /// The current game didn't start yet, the pegs need to be set up
@@ -167,7 +195,7 @@ namespace Softklin.Mastermind
     /// <summary>
     /// Represents the game difficulty level
     /// </summary>
-    enum DifficultyLevel
+    public enum DifficultyLevel
     {
         /// <summary>
         /// Easy difficulty, with 4 pegs and 8 rows
@@ -190,20 +218,4 @@ namespace Softklin.Mastermind
         Custom
     }
     #endregion
-
-
-    /// <summary>
-    /// Exceptions related with the MastermindGame Class
-    /// </summary>
-    [Serializable]
-    public class MastermindGameException : Exception
-    {
-        public MastermindGameException() { }
-        public MastermindGameException(string message) : base(message) { }
-        public MastermindGameException(string message, Exception inner) : base(message, inner) { }
-        protected MastermindGameException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context)
-            : base(info, context) { }
-    }
 }
