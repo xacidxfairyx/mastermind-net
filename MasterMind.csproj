@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Board.cs" />
+    <Compile Include="ColoredPegRow.cs" />
+    <Compile Include="MastermindExceptions.cs" />
     <Compile Include="MastermindGame.cs" />
     <Compile Include="IRandomProvider.cs" />
     <Compile Include="Mastermind.cs" />

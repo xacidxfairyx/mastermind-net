@@ -63,20 +63,4 @@ namespace Softklin.Mastermind
 
         #endregion
     }
-
-
-    /// <summary>
-    /// Exceptions related with the Player Class
-    /// </summary>
-    [Serializable]
-    public class MastermindPlayerException : Exception
-    {
-        public MastermindPlayerException() { }
-        public MastermindPlayerException(string message) : base(message) { }
-        public MastermindPlayerException(string message, Exception inner) : base(message, inner) { }
-        protected MastermindPlayerException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context)
-            : base(info, context) { }
-    }
 }
