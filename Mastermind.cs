@@ -66,5 +66,14 @@
             Player computer = new Player(computerNickname);
             return new MastermindGame(new Player[] { human, computer }, rows, pegs);
         }
+
+        /// <summary>
+        /// Creates an empty score card to store the scores of Mastermind games
+        /// </summary>
+        /// <returns>Empty score card</returns>
+        public static ScoreCard createScoreCard()
+        {
+            return new ScoreCard();
+        }
     }
 }
