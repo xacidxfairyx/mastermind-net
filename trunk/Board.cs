@@ -41,8 +41,7 @@
         /// </summary>
         /// <param name="level">Difficulty level</param>
         /// <remarks>Don't use this constructor to create a custom game</remarks>
-        internal Board(DifficultyLevel level)
-            : this()
+        internal Board(DifficultyLevel level) : this()
         {
             if (level == DifficultyLevel.Custom)
                 throw new MastermindBoardException("The difficulty level cannot be cutom");
@@ -76,8 +75,7 @@
         /// </summary>
         /// <param name="rows">Number of rows of board</param>
         /// <param name="pegs">Number of pegs per row</param>
-        internal Board(int rows, int pegs)
-            : this()
+        internal Board(int rows, int pegs) : this()
         {
             if (rows <= 0 || pegs <= 0)
                 throw new MastermindBoardException("Rows and pegs must be positive non-zero values");
@@ -103,13 +101,28 @@
             this.combination = combination;
         }
 
+        /// <summary>
+        /// Extracts the row and compares it to the combination
+        /// </summary>
+        /// <param name="row">The guess by player to compare to combination</param>
+        /// <returns>MoveResult struct, which carries some stats based on the guess. Also flags when no more moves are allowed.</returns>
         internal MoveResult doMove(ColoredPegRow row)
         {
             if (row.NumberPegs != this.NumberPegs)
                 throw new MastermindBoardException("The row is invalid for this move");
 
+            if (this.curRow >= this.NumberRows)
+                throw new MastermindBoardException("There are no more possible moves");
+
             MoveResult mr = new MoveResult();
-            //TODO logic implementation of doMove
+            mr.TotalRightColor = this.CurrentRow.EqualColors(row);
+            mr.TotalRightColorAndPosition = this.CurrentRow.EqualColorsAndPositions(row);
+            mr.TotalMoves = this.curRow + 1;
+            this.curRow++;
+
+            if (this.curRow >= this.NumberRows)
+                mr.NoMoreMoves = true;
+
             return mr;
         }
     }

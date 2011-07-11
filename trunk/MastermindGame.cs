@@ -1,4 +1,6 @@
-﻿namespace Softklin.Mastermind
+﻿using System;
+
+namespace Softklin.Mastermind
 {
     /// <summary>
     /// Represents a Mastermind game 
@@ -11,25 +13,72 @@
         /// </summary>
         public Player[] Players { get; private set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets the current player
         /// </summary>
-        public Player CurrentPlayer { get; private set; }
+        public Player CurrentPlayer { get; private set; }*/
 
         /// <summary>
         /// Gets the current game status
         /// </summary>
-        public GameStatus GameStatus { get; private set; }
+        public GameStatus Status { get; private set; }
 
         /// <summary>
         /// Get the actual game difficulty level
         /// </summary>
         public DifficultyLevel Level { get; private set; }
+
+        /// <summary>
+        /// Gets the winner of this match
+        /// </summary>
+        /// <remarks>Please note that the winner is avaliable only when the game ends</remarks>
+        public string Winner { 
+            get {
+                return (this.theWinner == null) ? null : this.theWinner.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Indicates the date and time of game creation
+        /// </summary>
+        public DateTime GameCreated { get; private set; }
+
+        /// <summary>
+        /// Indicates the date and time when the game started, after setup
+        /// </summary>
+        public DateTime GameStarted { get; private set; }
+
+        /// <summary>
+        /// Indicates the date and time when the game ended
+        /// </summary>
+        public DateTime GameEnded { get; private set; }
+
+        /// <summary>
+        /// Gets the ellapsed game time since start
+        /// </summary>
+        /// <remarks>
+        /// If the game didn't started, the game time will be 0
+        /// If the game didn't finished, it will be given the time so far since game start
+        /// If the game is already finished, the time ellapsed between game start and end will be given
+        /// </remarks>
+        public TimeSpan GameTime { 
+            get {
+                if (this.Status < GameStatus.Running)
+                    return new TimeSpan();
+                
+                else if (this.Status < GameStatus.Ended)
+                    return DateTime.Now.Subtract(this.GameStarted);
+
+                else
+                    return this.GameEnded.Subtract(this.GameStarted);
+            }
+        }
         #endregion
 
 
         #region Atributes
         private Board theBoard;
+        private Player theWinner;
         #endregion
 
 
@@ -52,7 +101,7 @@
                 throw new MastermindGameException("Players can't be equal");
 
             this.Players = players;
-            this.GameStatus = GameStatus.Setup;
+            this.Status = GameStatus.Setup;
         }
 
         /// <summary>
@@ -90,11 +139,11 @@
         /// <remarks>Once set, the combination cannot be changed</remarks>
         public void setup(ColoredPegRow combination)
         {
-            if (this.GameStatus != GameStatus.Setup)
+            if (this.Status != GameStatus.Setup)
                 throw new MastermindGameException("Setup can only be done during setup game status");
 
             this.theBoard.setup(combination);
-            this.GameStatus = GameStatus.Ready;
+            this.Status = GameStatus.Ready;
         }
 
         /*
@@ -143,10 +192,10 @@
         /// </summary>
         public void startGame()
         {
-            if (this.GameStatus != GameStatus.Ready)
+            if (this.Status != GameStatus.Ready)
                 throw new MastermindGameException("To start the game, setup is needed");
 
-            this.GameStatus = GameStatus.Running;
+            this.Status = GameStatus.Running;
         }
 
         /// <summary>
@@ -156,10 +205,25 @@
         /// <returns>Result stats of the move</returns>
         public MoveResult doMove(ColoredPegRow row)
         {
-            if (this.GameStatus != GameStatus.Running)
+            if (this.Status != GameStatus.Running)
                 throw new MastermindGameException("The game is not running");
 
-            return this.theBoard.doMove(row);
+            MoveResult result = this.theBoard.doMove(row);
+
+            // check for victory
+            if (result.TotalRightColorAndPosition == this.theBoard.NumberPegs)
+            {
+                this.theWinner = this.Players[0];  // human player
+                this.Status = GameStatus.Ended;
+
+            }
+            else if (result.NoMoreMoves)
+            {
+                this.theWinner = this.Players[1];  // computer
+                this.Status = GameStatus.Ended;
+            }
+
+            return result;
         }
     }
 
