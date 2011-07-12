@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines rules to create a Random Provider
     /// </summary>
-    /// <remarks>See https://code.google.com/p/mastermind-net/wiki/IRandomProvider for details</remarks>
+    /// <remarks>See https://code.google.com/p/mastermind-net/wiki/IRandomProvider for details. Reserved for future use</remarks>
     public interface IRandomProvider
     {
         /// <summary>
