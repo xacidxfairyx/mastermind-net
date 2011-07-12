@@ -22,6 +22,7 @@
         private ColoredPegRow CurrentRow
         {
             get { return this.rows[this.curRow]; }
+            set { this.rows[this.curRow] = value; }
         }
         #endregion
 
@@ -30,11 +31,13 @@
         private int curRow;
 
 
+        /// <summary>
+        /// Creates a new board with 0 rows
+        /// </summary>
         private Board()
         {
             this.curRow = 0;
         }
-
 
         /// <summary>
         /// Creates a new board, according to the difficulty level
@@ -108,6 +111,9 @@
         /// <returns>MoveResult struct, which carries some stats based on the guess. Also flags when no more moves are allowed.</returns>
         internal MoveResult doMove(ColoredPegRow row)
         {
+            if (row == null)
+                throw new MastermindBoardException("Row cannot be null");
+
             if (row.NumberPegs != this.NumberPegs)
                 throw new MastermindBoardException("The row is invalid for this move");
 
@@ -115,8 +121,9 @@
                 throw new MastermindBoardException("There are no more possible moves");
 
             MoveResult mr = new MoveResult();
-            mr.TotalRightColor = this.CurrentRow.EqualColors(row);
-            mr.TotalRightColorAndPosition = this.CurrentRow.EqualColorsAndPositions(row);
+            this.CurrentRow = row;
+            mr.TotalRightColor = this.CurrentRow.EqualColors(this.combination);
+            mr.TotalRightColorAndPosition = this.CurrentRow.EqualColorsAndPositions(this.combination);
             mr.TotalMoves = this.curRow + 1;
             this.curRow++;
 

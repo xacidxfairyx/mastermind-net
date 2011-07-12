@@ -21,7 +21,27 @@ namespace Softklin.Mastermind
         /// <summary>
         /// Gets the current game status
         /// </summary>
-        public GameStatus Status { get; private set; }
+        public GameStatus Status { 
+            get {
+                return this.gameStatus;
+            }
+            private set
+            {
+                // update game time stats here
+                switch (value)
+                {
+                    case GameStatus.Running:
+                        this.GameStarted = DateTime.Now;
+                        break;
+
+                    case GameStatus.Ended:
+                        this.GameEnded = DateTime.Now;
+                        break;
+                }
+
+                this.gameStatus = value;
+            }
+        }
 
         /// <summary>
         /// Get the actual game difficulty level
@@ -73,12 +93,22 @@ namespace Softklin.Mastermind
                     return this.GameEnded.Subtract(this.GameStarted);
             }
         }
+
+        /// <summary>
+        /// Gets the unique Game ID
+        /// </summary>
+        internal int GameID
+        {
+            get { return gameID; }
+        }
         #endregion
 
 
         #region Atributes
+        private static int gameID = 0;
         private Board theBoard;
         private Player theWinner;
+        private GameStatus gameStatus;
         #endregion
 
 
@@ -102,6 +132,8 @@ namespace Softklin.Mastermind
 
             this.Players = players;
             this.Status = GameStatus.Setup;
+            this.GameCreated = DateTime.Now;
+            gameID++;
         }
 
         /// <summary>
