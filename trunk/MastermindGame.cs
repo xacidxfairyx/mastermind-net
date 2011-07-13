@@ -282,7 +282,7 @@ namespace Softklin.Mastermind
         Running,
 
         /// <summary>
-        /// The game endend, and the score card was updated
+        /// The game endend, and the score card can be updated
         /// </summary>
         Ended
     }

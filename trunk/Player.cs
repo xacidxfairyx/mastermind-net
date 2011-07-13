@@ -37,7 +37,7 @@ namespace Softklin.Mastermind
         /// Checks if two PLayers are equal (by nicknames)
         /// </summary>
         /// <param name="obj">Other object to compare</param>
-        /// <returns>True, if there is the smae player, false otherwise</returns>
+        /// <returns>True, if there is the same player, false otherwise</returns>
         public override bool Equals(object obj)
         {
             return (obj is Player && ((Player)obj).Nickname == this.Nickname);
