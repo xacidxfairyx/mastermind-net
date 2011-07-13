@@ -47,7 +47,7 @@
         internal Board(DifficultyLevel level) : this()
         {
             if (level == DifficultyLevel.Custom)
-                throw new MastermindBoardException("The difficulty level cannot be cutom");
+                throw new MastermindBoardException("The difficulty level cannot be custom");
 
             switch (level)
             {
