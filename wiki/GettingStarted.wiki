@@ -47,6 +47,3 @@ When the game ends, it's not possible to do more moves, but there is a lot of in
   * Time statistics
   * The winner of this match
   * Save the players victory in the ScoreCard
-
-= Everyone is different = 
-You don't need to use all the resource this class offers: just use what you want. Also, your programming style shouldn't be affected: with events, you can create small pieces of code that will be triggered by the right event. The class was designed to make it easier for developers to follow their own programming styles.
